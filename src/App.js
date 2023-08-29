@@ -1,23 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Button from './components/Button/Button';
+import TimeDisplay from './components/TimeDisplay/TimeDisplay';
+import { useEffect, useState } from 'react';
 
-function App() {
+const  App = () => {
+ 
+const[currentTime, setCurrentTime] = useState(0);
+const[intervalId, setIntervalId] = useState(null);
+
+const startTimer = () => {
+  const newIntervalId = setInterval(() => {
+    setCurrentTime(prevTime => prevTime + 1);
+  }, 1);
+  console.log('1');
+
+  setIntervalId(newIntervalId);
+};
+
+const stopTimer = () => {
+  clearInterval(intervalId);
+  setIntervalId(null);
+  console.log('2');
+};
+
+const resetTimer = () => {
+  clearInterval(intervalId);
+  setIntervalId(null);
+  setCurrentTime(0);
+  console.log('3');
+};
+
+useEffect(() => {
+  return () => {
+    clearInterval(intervalId);
+  };
+}, [intervalId]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      
+      <TimeDisplay milliseconds={currentTime}/>
+      <div className='mydiv'>
+        <Button onClick={startTimer} children={'Start'}/>
+        <Button onClick={stopTimer} children={'Stop'}/>
+        <Button onClick={resetTimer} children={'Reset'}/>
+      </div>
     </div>
   );
 }
